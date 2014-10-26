@@ -1,4 +1,4 @@
-local version = "1.05"
+_G.version = "1.00"
 
 
 require 'VPrediction'
@@ -193,7 +193,7 @@ function UpdateCallback()
         file:close()
         os.remove(UPDATE_TMP_FILE)
         if content then
-            tmp, sstart = string.find(content, "local version = \"")
+            tmp, sstart = string.find(content, "_G.version = \"")
             if sstart then
                 send, tmp = string.find(content, "\"", sstart+1)
             end
@@ -206,12 +206,12 @@ function UpdateCallback()
                 file:write(content)
                 file:flush()
                 file:close()
-                PrintChat("<font color=\"#81BEF7\" >UnifiedSona:</font> <font color=\"#00FF00\">Successfully updated to: v"..Version..". Please reload the script with F9.</font>")
+                PrintChat("<font color=\"#81BEF7\" >TheRakaReturns:</font> <font color=\"#00FF00\">Successfully updated to: v"..Version..". Please reload the script with F9.</font>")
             else
-                PrintChat("<font color=\"#81BEF7\" >UnifiedSona:</font> <font color=\"#FF0000\">Error updating to new version (v"..Version..")</font>")
+                PrintChat("<font color=\"#81BEF7\" >TheRakaReturns:</font> <font color=\"#FF0000\">Error updating to new version (v"..Version..")</font>")
             end
             elseif (Version ~= nil) and (Version == tonumber(version)) then
-                PrintChat("<font color=\"#81BEF7\" >UnifiedSona:</font> <font color=\"#00FF00\">No updates found, latest version: v"..Version.." </font>")
+                PrintChat("<font color=\"#81BEF7\" >TheRakaReturns:</font> <font color=\"#00FF00\">No updates found, latest version: v"..Version.." </font>")
             end
         end
     end
