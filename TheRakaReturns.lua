@@ -1,8 +1,9 @@
 local version = "1.05"
-local SCRIPT_NAME = "TheRakaReturns"
+
 
 require 'VPrediction'
---require "spellList"
+require "spellList"
+
 AvoidBugsplats = false
 AvoidBugsplats = not AvoidBugsplats
 ----------------------------------------------
@@ -172,69 +173,49 @@ _G.customShopList = {
 -- You may add your own lines of comments /insults here, just make sure to put a proper ',' between them. 
 _G._G.DQUOTES = 60 
 _G.KillQuotes = {'/all I have lived for centuries, I will live past your attack.','/all you should have listened to the stars.','/all the stars scream of your ignorance.','/all idiot, did you think you could stand to my divine radiance.','/all like the stars, I can no longer hear your heart.','/all I could heal you, but I dont feel like it. ','/all pray we do not cross paths again, Pray to me!','/all your cruelty ends today.','/all you will go no further.','/all be at peace, fool.','/all such ugly in your hearts.','/all I will carry this.','/all you probably need an infusion.','/all run over by the wambulance.','/all death by banana.','/all no one expects the banana.','/all do you always fight so poorly? ','/all you do always fight so poorly?','/all do you always fight so poorly?','/all you do always fight so poorly?','/all so poorly?','/all always fight so poorly?','/all always fight so poorly?','/all I dont think ill save you.','/all I will not save you.','/all GG!','/all gg!','/all gg','/all there is no hope for you.','/all It is not in my nature to kill, but you were an exception.','/all that star few for thousands of years, just to kill you.','/all you overstep your boundaries, I am a God!','/all you will fall, like the stars, before me.','/all your star has fallen.','/all do you WISH to try me again?','/all your futile attempts amuse me.','/all give up now and I will tend your wounds.','/all you need a savior, instead you face one.','/all did you think you would escape?','/all get rakaed!'}
-
---------------------------
--- Encrypt Below Here Please --
-local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
-local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
-if FileExist(SOURCELIB_PATH) then
-require("SourceLib")
-else
-DOWNLOADING_SOURCELIB = true
-DownloadFile(SOURCELIB_URL, SOURCELIB_PATH, function() print("Required libraries downloaded successfully, please reload") end)
-end
-if DOWNLOADING_SOURCELIB then print("Downloading required libraries, please wait...") return end
-if AUTOUPDATE then
-SourceUpdater(SCRIPT_NAME, version, "http://pastebin.com/raw.php?i=", "5mCDCXra", SCRIPT_PATH .. GetCurrentEnv().FILE_NAME, "5mCDCXra"):CheckUpdate()
-end
-local RequireI = Require("SourceLib")
-RequireI:Add("vPrediction", "https://raw.github.com/honda7/BoL/master/Common/VPrediction.lua")
---RequireI:Add("SOW", "https://raw.github.com/honda7/BoL/master/Common/SOW.lua")
-RequireI:Check()
-if RequireI.downloadNeeded == true then return end---------------------------
-
-
---[[
+-----------------------------------------------------
+-----------------------------------------------------
 --UPDATE SETTINGS
 local AutoUpdate = true
 local SELF = SCRIPT_PATH..GetCurrentEnv().FILE_NAME
-local URL = "http://pastebin.com/raw.php?i=5mCDCXra"..math.random(100)
-local UPDATE_TMP_FILE = LIB_PATH.."TRRTemp.txt"
-local versionmessage = "<font color=\"#81BEF7\" >Changelog:Minor optimizations</font>"
+local URL = "https://raw.githubusercontent.com/Tc2r/BoL/master/TheRakaReturns.lua?"..math.random(100)
+local UPDATE_TMP_FILE = LIB_PATH.."khjhhu.txt"
+local versionmessage = "<font color=\"#81BEF7\" >changelog: Lots of Stuff</font>"
+
 function Update()
 DownloadFile(URL, UPDATE_TMP_FILE, UpdateCallback)
 end
+
 function UpdateCallback()
-file = io.open(UPDATE_TMP_FILE, "rb")
-if file ~= nil then
-content = file:read("*all")
-file:close()
-os.remove(UPDATE_TMP_FILE)
-if content then
-tmp, sstart = string.find(content, "_G.version = \"")
-if sstart then
-send, tmp = string.find(content, "\"", sstart+1)
+    file = io.open(UPDATE_TMP_FILE, "rb")
+    if file ~= nil then
+        content = file:read("*all")
+        file:close()
+        os.remove(UPDATE_TMP_FILE)
+        if content then
+            tmp, sstart = string.find(content, "local version = \"")
+            if sstart then
+                send, tmp = string.find(content, "\"", sstart+1)
+            end
+            if send then
+                Version = tonumber(string.sub(content, sstart+1, send-1))
+            end
+            if (Version ~= nil) and (Version > tonumber(version)) and content:find("--EOS--") then
+                file = io.open(SELF, "w")
+            if file then
+                file:write(content)
+                file:flush()
+                file:close()
+                PrintChat("<font color=\"#81BEF7\" >UnifiedSona:</font> <font color=\"#00FF00\">Successfully updated to: v"..Version..". Please reload the script with F9.</font>")
+            else
+                PrintChat("<font color=\"#81BEF7\" >UnifiedSona:</font> <font color=\"#FF0000\">Error updating to new version (v"..Version..")</font>")
+            end
+            elseif (Version ~= nil) and (Version == tonumber(version)) then
+                PrintChat("<font color=\"#81BEF7\" >UnifiedSona:</font> <font color=\"#00FF00\">No updates found, latest version: v"..Version.." </font>")
+            end
+        end
+    end
 end
-if send then
-Version = tonumber(string.sub(content, sstart+1, send-1))
-end
-if (Version ~= nil) and (Version > tonumber(version)) and content:find("--EOS--") then
-file = io.open(SELF, "w")
-if file then
-file:write(content)
-file:flush()
-file:close()
-PrintChat("<font color=\"#6C2DC7\" >TheRakaReturns:</font> <font color=\"#00FF00\">Successfully updated to: v"..Version..". Please reload the script with F9.</font>")
-else
-PrintChat("<font color=\"#6C2DC7\" >TheRakaReturns:</font> <font color=\"#FF0000\">Error updating to new version (v"..Version..")</font>")
-end
-elseif (Version ~= nil) and (Version == tonumber(version)) then
-PrintChat("<font color=\"#6C2DC7\" >TheRakaReturns:</font> <font color=\"#00FF00\">No updates found, latest version: v"..Version.." </font>")
-end
-end
-end
-end
-]]
 
 -- Champion Check
 if myHero.charName ~= "Soraka" then return end
@@ -244,18 +225,9 @@ sBy = 1
 bOrd = 0
 pBld  = 0
 bDly = 1000 --Buys an item every second
--- avoid spells
---UPDATE SETTINGS
-local AutoUpdate = false
---function Update()
---DownloadFile(URL, UPDATE_TMP_FILE, UpdateCallback)
---end
 
-function UpdateCallback()
-end
+
 -- Default Automode Controls, can be changed here or in game: 
-
-
 local GLOBAL_RANGE = 0
 local NO_RESOURCE = 0
 local MAX_PLAYER_AA_RANGE = 850
@@ -689,11 +661,10 @@ function doSorakaUlt()
 
  --Ult based on ultMode
 	if config.autoUlt.ultMode == 1 then
-
 	-- Mode 1 Soraka Only Ults When A Nearby Ally Is Hurt
 		for i, allyult in ipairs(GetAllyHeroes()) do
-			if allyult ~= nil and (allyult.health /allyult.maxHealth) <= (config.autoUlt.ultThreshold / 100) and allyult.isrecalling ~= true then
-				if (allyult:GetDistance(allySpawn)) > 1300 and player:GetDistance(allyult) < 2500 then
+			if allyult ~= nil and (allyult.health /allyult.maxHealth) <= (config.autoUlt.ultThreshold / 100) and allyult.dead == false and allyult.isrecalling ~= true then
+				if (allyult:GetDistance(allySpawn)) > 1300 and player:GetDistance(allyult) < 3000 then
 					CastSpell(_R, myHero)
 					print("I will save "..allyult.name)
 					
@@ -705,7 +676,7 @@ function doSorakaUlt()
 	if config.autoUlt.ultMode == 2 then
 -- Ults any teamamte who is in critical condition, globally
 		for i, allyult in ipairs(GetAllyHeroes()) do
-			if allyult ~= nil and (allyult.health/allyult.maxHealth) < (config.autoUlt.ultThreshold / 100) and allyult.isrecalling == nil and allyult:GetDistance(allySpawn) > 1300 then
+			if allyult ~= nil and (allyult.health/allyult.maxHealth) < (config.autoUlt.ultThreshold / 100) and allyult.dead == false and allyult.isrecalling == nil and allyult:GetDistance(allySpawn) > 1300 then
 				CastSpell(_R, myHero)
                 print("I will save "..allyult.name)				
 			end
@@ -1347,7 +1318,10 @@ end
 
 
 function OnLoad()
-	PrintChat("<font color='#6C2DC7'> * / / *The R*ka Retu/rns/*/./ </font>")
+        if AutoUpdate then
+            Update()
+        end
+	--PrintChat("<font color='#6C2DC7'> * / / *The R*ka Retu/rns/*/./ </font>")
 	player = GetMyHero()
 	startingTime = GetTickCount()
 	QuoteTime = os.clock() + 60
