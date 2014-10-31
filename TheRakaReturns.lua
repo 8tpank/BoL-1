@@ -1,4 +1,4 @@
-_G.version = "1.046"
+_G.version = "1.045"
 
 AvoidBugsplats = false
 AvoidBugsplats = not AvoidBugsplats
