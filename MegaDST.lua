@@ -1,4 +1,4 @@
-local version = "1.2"
+local version = "1.4"
 --By Tc2r
 --Framework From Rmoises
 local deathDelay =  0 
@@ -6,11 +6,14 @@ local talkDelay = 0
 local congdelay = 0
 local pausedelay = 0
 local wardsdelay = 0
-gameState = nil
+Endgame = 0
+game = nil
+welldone = false
 allies = {}
 akills = {}
 awards = {}
 akwards = {}
+
 -- Changelog
 -- added saying things on kills
 -- Fixed saying things at 00:00
@@ -40,6 +43,7 @@ local ProJection ={'Holy cow ','Jesus ','Daang ','Dang ','Damn ','Omg ','Dear lo
 local WardPlace ={'Nice warding ','Great Vision ','good vision ', 'nice warding','thanks for warding ','nice map control ','gj warding ','gj warding ','gj warding ','nj warding ','nj warding ','these wards! keep up the good work '}
 
 local Deward ={'great map control ','good map control ','nice map control ','best map control ','good map control ','good map control ','great vision control ',':D kill all the wards '}
+
 function GetPlayers(team, includeDead, includeSelf)
   local players = {}
   local result = {}
@@ -56,8 +60,7 @@ function GetPlayers(team, includeDead, includeSelf)
     end
   end
   
-  if 
-    includeSelf then table.insert(result, player)
+  if includeSelf then table.insert(result, player)
   else 
     for i=1, #result, 1 do
       if result[i] == player then
@@ -71,21 +74,21 @@ function GetPlayers(team, includeDead, includeSelf)
 end
 
 function OnLoad()
-deathDelay = os.clock() + 180
-talkDelay = os.clock() + 300
-PrintChat("MEGA D.S.T. V.1.1")
-DST = scriptConfig("DST","DST v1.1") 
-DST:addParam("Delay", "Chat Delay",SCRIPT_PARAM_SLICE, 400, 30, 2000, -1)
-DST:addParam("CDelay", "Delay Between GJs",SCRIPT_PARAM_SLICE, 120, 10, 2000, -1)
+  game = GetGame()
+  deathDelay = os.clock() + 180
+  talkDelay = os.clock() + 300
+  PrintChat("MEGA D.S.T. V.1.3")
+  DST = scriptConfig("DST","DST v1.3") 
+  DST:addParam("Delay", "Chat Delay",SCRIPT_PARAM_SLICE, 120, 30, 2000, -1)
+  DST:addParam("CDelay", "Delay Between GJs",SCRIPT_PARAM_SLICE, 20, 15, 2000, -1)
 --DST:addParam("WDelay", "Compliment Warding",SCRIPT_PARAM_SLICE, 60, 10, 1000, -1)
 
-allies = GetPlayers(player.team, true, false)
+  allies = GetPlayers(myHero.team, true, false)
   for i=1, #allies, 1 do
   	akills[i] = allies[i].kills
-    awards[i] = allies[i].wardPlaced
-    akwards[i] = allies[i].wardKill
   end
 end
+
 
 function CompareTeams()
   local enemykills = 0 
@@ -93,6 +96,7 @@ function CompareTeams()
   local winning = false
   for i, enemy in ipairs(GetEnemyHeroes()) do
     enemykills = enemy.kills + enemykills
+    --print(enemy.name.." has "..enemy.kills.."kills")
   end
   for i=1, heroManager.iCount do
     local ally = heroManager:GetHero(i)
@@ -100,28 +104,34 @@ function CompareTeams()
       alliedkills = ally.kills + alliedkills
     end
   end
+  --print("ally kills : "..alliedkills)
+  --print("enemy kills : "..enemykills)
   if(enemykills < alliedkills) then
     winning = true
   else
-    winning = false
+    winning = true -- false once .kills is working again
   end
   return winning
 end
 
-function KillPos()
+function KillPos(i)
   if gameState == true then
-    local ranN = math.random(0,100)
-    if ranN > 90 then 
-      SendChat(ProJection[ math.random( #ProJection ) ]..string.lower(string.sub(allies[1].name, 0,(math.random(3,7))))..ProComp[ math.random( #ProComp ) ]..ProBoost[ math.random( #ProBoost ) ]  )
-    elseif ranN > 72 then
-      SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(allies[i].name, 0,(math.random(3,8)))))
+    math.randomseed(os.time())
+    local ranN = math.random(1,100)
+    if ranN > 86 then 
+      
+      SendChat(ProJection[ math.random( #ProJection ) ]..string.lower(string.sub(allies[i].name, 0,(math.random(5,10))))..ProComp[ math.random( #ProComp ) ]..ProBoost[ math.random( #ProBoost ) ]  )
+    elseif ranN > 70 then
+      
+      SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(allies[i].name, 0,(math.random(5,10)))))
     elseif ranN > 50 then
+      
       SendChat(KillBoost[ math.random( #KillBoost ) ])
     end
   else
-    local ranN = math.random(0,100)
+    local ranN = math.random(1,100)
     if ranN > 70 then
-       SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(allies[i].name, 0,(math.random(3,8))))..", "..LosingQuotes[ math.random( #LosingQuotes ) ])            
+       SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(allies[i].name, 0,(math.random(5,10))))..", "..LosingQuotes[ math.random( #LosingQuotes ) ])            
     elseif ranN > 40 then
        SendChat(KillBoost[ math.random( #KillBoost ) ]..LosingQuotes[ math.random( #LosingQuotes ) ])
     end
@@ -129,6 +139,16 @@ function KillPos()
 end
 
 function OnTick()
+      if game.isOver and Endgame == 0 then 
+        local Farewell = {'I am going to honor everyone', 'great game guys, honor for all', 'honoring you guys, awesome time','best team ive seen in awhile, im honoring you guys','thanks for carrying me, ill honor you guys','definately honoring this team','fun game, what type of honor do you want?','honors please','ggwp honors please','gg honors please','fun game, honors please','honors','ggwp honors','gg honors','fun game, honors','helpful honors please','ggwp helpful honors please','gg helpful honors please','fun game, helpful honors pleasee',}
+        TempRNG = #Farewell
+        SendChat( Farewell[ math.random(TempRNG) ] )
+        Endgame = 1
+       return
+    end
+--print(myHero.name.." has "..myHero.minionScore.."kills")
+--print(myHero.name.." has "..myHero.minionKill.."kills")
+  
   --[[
   if myHero.wardsUse > 0 then 
     print("Somethingworked")
@@ -160,10 +180,10 @@ for i=1, #akwards, 1 do
     end
   end
 end
-]]
---CompareTeams()  
+]]--
+CompareTeams()  
 for i=1, #akills, 1 do  
-	if akills ~= nil and allies[i].kills ~= nil  then 
+	if akills ~= nil and allies[i].kills ~= nil then 
 		if(allies[i].kills ~= akills[i]) then 
       if os.clock() > congdelay then
         gameState = CompareTeams()
@@ -174,13 +194,33 @@ for i=1, #akills, 1 do
 		end
 	end
 end
+  --welldone = true
+  -- TEMP FIX FOR SCRIPT  UNTIL THEY FIX .kill
+for j, enemy in ipairs(GetEnemyHeroes()) do
+    if InFountain(enemy) ~= true and enemy ~= nil and enemy.visible == true and enemy.dead == true and welldone == false then
+        for i, ally in ipairs(GetAllyHeroes()) do
+          if (ally:GetDistance(enemy) < 1000) and welldone == false then 
+          if os.clock() > congdelay then
+              gameState = CompareTeams()
+              DelayAction(function() KillPos(i) end, 3)
+              congdelay = os.clock() + DST.CDelay              
+              welldone = true        
+          end
+          end
+        end
+        welldone = false
+  
+
+    end
+end
+
 
 
 if os.clock() > deathDelay and myHero.dead then
-	if (math.random(0,100) < 30) then
+	if (math.random(1,100) < 30) then
 		SendChat( ThingsDead[ math.random( #ThingsDead ) ] )
 	end
-	deathDelay = os.clock() + 120 -- DELAY METHOD VERY IMPORTANT
+	deathDelay = os.clock() + 220 -- DELAY METHOD VERY IMPORTANT
 end
 
   if os.clock() > talkDelay  then
@@ -193,6 +233,8 @@ end
       SendChat( LosingQuotes[ math.random( #LosingQuotes ) ] )
         --SendChat( LosingQuotes[ math.random( #LosingQuotes ) ] )
 	 end
-talkDelay = os.clock() + math.random(DST.Delay,DST.Delay + 10) -- DELAY METHOD VERY IMPORTANT
+talkDelay = os.clock() + math.random((DST.Delay - 30) , (DST.Delay + 30)) -- DELAY METHOD VERY IMPORTANT
 end
+
+
 end
