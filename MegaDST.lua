@@ -1,4 +1,4 @@
-local version = "1.4"
+local version = "1.3"
 --By Tc2r
 --Framework From Rmoises
 local deathDelay =  0 
