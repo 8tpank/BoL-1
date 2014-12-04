@@ -15,7 +15,7 @@ akills = {}
 awards = {}
 akwards = {}
 
-local AutoUpdate = false
+local AutoUpdate = true
 local SELF = SCRIPT_PATH..GetCurrentEnv().FILE_NAME
 local URL = "https://raw.githubusercontent.com/Tc2r/BoL/master/MegaDST.lua?"..math.random(100)
 local UPDATE_TMP_FILE = LIB_PATH.."dsjtsdst.txt"
