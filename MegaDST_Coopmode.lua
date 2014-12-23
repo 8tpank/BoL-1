@@ -1,8 +1,8 @@
-local version = "1.7"
+local version = "1.8"
 --By Tc2r
 --Framework From Rmoises
 local deathDelay = 120
-local talkDelay = 120
+local talkDelay = 760
 local congdelay = 0
 local pausedelay = 0
 local wardsdelay = 0
@@ -62,13 +62,13 @@ local TempFix = {'who should we jump on?','who should initiate for us next time?
 local Farewell = {'I am going to honor everyone', 'great game guys, honor for all', 'honoring you guys, awesome time','best team Ive seen in awhile, im honoring you guys','thanks for carrying me, ill honor you guys','definitely honoring this team','fun game, what type of honor do you want?','honors please','ggwp honors please','gg honors please','fun game, honors please','honors','ggwp honors','gg honors','fun game, honors','helpful honors please','ggwp helpful honors please','gg helpful honors please','fun game, helpful honors pleasee',}
 
 --- Quotes to say when Winning
-local WinningQuotes  = {'lets finish this game','who should we jump on?','who should initate for us next time?','who should we focus next time?','what should I build now to push the advantage?','since were winning,can we win if we group?','what must we do to win this?','should we use our lead to split push or team up?','goodjob guys, lets bring it home','goodjob guys, lets finish it','we got this :D','we got this^_^','we got this:)','we got this:-D','we got this 8)','we got this :P','play smart, we winning :D','play smart, we winning ^_^','we are winning, play smart:)','play smart, we winning :-D','play smart, we winning 8)','play smart, we winning :P','objectives','objectives ^_^','objectives :)',' objectives :D','I like this team','nice plays, we can win this','play smart, we winning','few mistakes but well win','You guys kick ass!','you are really good at this','you are such a good teammate :D','I love your mechanics','you must practice a ton','Wow nice cs','Man youre impressive','youre talented','Im glad youre on my team','I<3you', 'i<3U',':D <3','Dang youre good at laning','good plays guys','lol we got this','what are you guys going to build?','should we push mid or split push?' ,'this is my team, I like yall, lets finish it','good effort', 'I like your style', 'well done!', 'Nice positioning controls','nice energy', 'great item build :D','I feel confident','that was brave','we can do this!','I believe','you can do it','you guys are beautiful','a fun match? this is a blessing','way to go!','lets keep tryin','that was really smart!','careful we dont throw our lead ^.~','dont be afraid, teamfight','s okay no worries','it will be worth it!','they throwing lol, see!','we CAN do this','just have fun, we got this','I love you!<3','Anything is possible','nj ','he flashed?','ty','>_<',':0 whoa!',':)','gg wll win','nice','<3','still got my nike boots!','gj','lets have a good game!','thanks','dont be risky','lets win this','=D','gjgj','we need to group','stay grouped and we win','only fight as a team','push towers quick','dont worry this is easy we will win', 'we got this', 'we will be fine', 'we outscale them dont worry', 'our teamfight is amazing','keep it up we got this.', 'we are winning' ,'no worries we will win','we will poop on them','We are really op','This champion is fun','XD','good deal', 'great rotation!', 'late game is ours', 'their scaling sucks', 'they have no organization', 'they arent going for objectives', 'lets rock them', 'i believe','their team is horrible ^_~ ', 'They play like wood 3 elo, we got this','turn down for what?','you are rly good','lets group and win','thanks for carrying me','great awareness guys'}
+local WinningQuotes  = {'lets finish this game','who should we jump on?','who should initiate for us next time?','who should we focus next time?','what should I build now to push the advantage?','since were winning,can we win if we group?','what must we do to win this?','should we use our lead to split push or team up?','good job guys, lets bring it home','goodjob guys, lets finish it','we got this :D','we got this^_^','we got this:)','we got this:-D','we got this 8)','we got this :P','play smart, we winning :D','play smart, we winning ^_^','we are winning, play smart:)','play smart, we winning :-D','play smart, we winning 8)','play smart, we winning :P','objectives','objectives ^_^','objectives :)',' objectives :D','I like this team','nice plays, we can win this','play smart, we winning','few mistakes but well win','You guys kick ass!','you are really good at this','you are such a good teammate :D','I love your mechanics','you must practice a ton','Wow nice cs','Man youre impressive','youre talented','Im glad youre on my team','I<3you', 'i<3U',':D <3','Dang youre good at laning','good plays guys','lol we got this','what are you guys going to build?','should we push mid or split push?' ,'this is my team, I like yall, lets finish it','good effort', 'I like your style', 'well done!', 'Nice positioning controls','nice energy', 'great item build :D','I feel confident','that was brave','we can do this!','I believe','you can do it','you guys are beautiful','a fun match? this is a blessing','way to go!','lets keep trying','that was really smart!','careful we dont throw our lead ^.~','dont be afraid, team fight','s okay no worries','it will be worth it!','they throwing lol, see!','we CAN do this','just have fun, we got this','I love you!<3','Anything is possible','nj ','he flashed?','ty','>_<',':0 whoa!',':)','gg wll win','nice','<3','still got my nike boots!','gj','lets have a good game!','thanks','dont be risky','lets win this','=D','gjgj','we need to group','stay grouped and we win','only fight as a team','push towers quick','dont worry this is easy we will win', 'we got this', 'we will be fine', 'we out scale them dont worry', 'our team fight is amazing','keep it up we got this.', 'we are winning' ,'no worries we will win','we will poop on them','We are really op','This champion is fun','XD','good deal', 'great rotation!', 'late game is ours', 'their scaling sucks', 'they have no organization', 'they arent going for objectives', 'lets rock them', 'i believe','their team is horrible ^_~ ', 'They play like wood 3 elo, we got this','turn down for what?','you are rly good','lets group and win','thanks for carrying me','great awareness guys'}
 
 --- Quotes to say when Losing
-local LosingQuotes  = {'hang in there','we should ward our jungle, might make them throw','what should we do now?','who should initate for us next time?','who should we focus next time?','what should I build next?','where should we ward?','think we can get the next dragon?','can we win if we group?','what must we do to win this?','should we split push or team up?','lets go out fighting', 'they can still throw',' we will make a comeback','this isnt over','this is still winnable','this IS still winnable','we will recover','we can recover','just chill, we got late game','we got late game','hold out, they will throw','hold out, we will come back','hold out, this isnt over','hold out, this is still winnable','hold out, we can savage this game','hold out, they will make mistakes','hold out, everyone ward','hold out, play smarter','dont give up just yet, they will throw','dont give up, we will come back','dont give up, this isnt over','dont give up, they can make mistakes','dont give up, we still have a chance','dont give up, we can recover','dont give up, everyone place wards','dont give up, play smarter','dont give up','few mistakes but we will win','lets keep tryin, no point in giving up','we outscale them dont worry','should we push mid or split push?','good effort, dont give up','dont argue, focus on winning','careful we dont overextend ^.~','we CAN do this', 'lets keep tryin', 'we crush them in teamfights','we will be fine', 'we outscale them dont worry', 'our teamfight is amazing','keep it up we got this.', 'we can win' ,'no worries we will win','keep things warded and we should be fine','we are really op late game','we secure the next dragon and we will win.','late game is ours', 'their scaling sucks', 'they have no organization', 'they arent going for objectives','we are still in this','if we focus the squishes i think we got this'}
+local LosingQuotes  = {'hang in there','we should ward our jungle, might make them throw','what should we do now?','who should initiate for us next time?','who should we focus next time?','what should I build next?','where should we ward?','think we can get the next dragon?','can we win if we group?','what must we do to win this?','should we split push or team up?','lets go out fighting', 'they can still throw',' we will make a comeback','this isnt over','this is still winnable','this IS still winnable','we will recover','we can recover','just chill, we got late game','we got late game','hold out, they will throw','hold out, we will come back','hold out, this isnt over','hold out, this is still winnable','hold out, we can savage this game','hold out, they will make mistakes','hold out, everyone ward','hold out, play smarter','dont give up just yet, they will throw','dont give up, we will come back','dont give up, this isnt over','dont give up, they can make mistakes','dont give up, we still have a chance','dont give up, we can recover','dont give up, everyone place wards','dont give up, play smarter','dont give up','few mistakes but we will win','lets keep trying, no point in giving up','we out scale them dont worry','should we push mid or split push?','good effort, dont give up','dont argue, focus on winning','careful we dont overextend ^.~','we CAN do this', 'lets keep trying', 'we crush them in team fights','we will be fine', 'we out scale them dont worry', 'our team fight is amazing','keep it up we got this.', 'we can win' ,'no worries we will win','keep things warded and we should be fine','we are really op late game','we secure the next dragon and we will win.','late game is ours', 'their scaling sucks', 'they have no organization', 'they arent going for objectives','we are still in this','if we focus the squishes i think we got this'}
 
 --- Quotes to say when you die
-local ThingsDead  = {'oops lol','shit sorry', 'damn my bad','T_T my fault', '>.<','trying, sorry','I wont do that again','sorry guys', 'ewww, I messed up','x_x ill play more safely', 'man down, think i need some help MEDIC', 'IM SRY','this is a bit tough on me, sorry','Dammit I keep messing up!', 'help please, I dont want to die again','alright, serious mode >.<', 'Im outplayed, help please sorry', 'this isnt my game, but we can win','Ill do better, sorry'}
+local ThingsDead  = {'oops lol','shit sorry', 'damn my bad','myfault','my fault','ill play better','my mistake','T_T my fault', '>.<','trying, sorry','I wont do that again','sorry guys', 'ewww, I messed up','x_x ill play more safely', 'man down, think i need some help MEDIC','sry','sorry','sorry guys','died, sorry','IM SRY','this is a bit tough on me, sorry','Darn, messed up', 'I will try not to die again','alright, serious mode >.<', 'outplayed, sorry', 'ill be more careful','Ill do better, sorry','how stupid of me, sorry i died','how careless, sorry team','my bad, how stupid of me','should not have died,sorry', 'sorry, thats my fault','sry i died, pls dont be mad at me'}
 
 --- puzzle pieces to form complex chats
 local KillBoost = {'great kill', 'damn dude, carry me harder','gjgj ','gj ','gj ','gj ','gj ','gj ','gj ','gj ','gj ','gj ','gj ','gjgjgjgjgjgj ','gjgjgjgjgj ','gjgjgj ','that kill blew my mind','the skill!!! ', 'nice! ','the plays!! ','HELL YEAH!','good deal! ','Goodjob! ','Goodjob:) ','Goodjob ^_^ ','Goodjob =) ','sweetness ','Goodjob :P ','!Goodjob! ','goodjob! ','goodjob:) ','goodjob ^_^ ','goodjob =) ','goodjob :P ','!goodjob! ','Greatjob! ','Great job:) ','Great job ^_^ ','Great job =) ','Great job :P ','Great Job! ','greatjob! ','great job:) ','great job ^_^ ','great job =) ','great job :P ','great Job! ','Gj! ','Gj:) ','Gj ^_^ ','Gj =) ','Gj :P ','GJ! ','Nj! ','NJ:) ','Nj ^_^ ','Nj =) ','Nj :P ','NJ! ','nj! ','nJ:) ','nj ^_^ ','nj =) ','nj :P ','nJ! ','well played! ','well played:) ','well played ^_^ ','well played =) ','well played :P ','WELL PLAYED! '}
@@ -126,14 +126,20 @@ function OnLoad()
        Update()
     end
   game = GetGame()
-  deathDelay = os.clock() + 180
-  talkDelay = os.clock() + 300
+  deathDelay = os.clock() + deathDelay
+  talkDelay = os.clock() + talkDelay
   DST = scriptConfig("Tc2rs D.S.T. CO-OP","DST")
-  DST:addParam("Delay", "Chat Delay",SCRIPT_PARAM_SLICE, 400, 100, 3000, -2)
-  DST:addParam("CDelay", "Delay Between GJs",SCRIPT_PARAM_SLICE, 120, 15, 3000, -1)
+  DST:addParam("banter","Friendly Banter?", SCRIPT_PARAM_ONOFF, true)
+  DST:addParam("Delay", "Banter Delay",SCRIPT_PARAM_SLICE, 400, 100, 3000, -2)
+   DST:addParam("CDelay", "Delay Between GJs",SCRIPT_PARAM_SLICE, 120, 20, 3000, -1)
+  DST:addSubMenu("Good Job Options!", "goodjob", SCRIPT_PARAM_ONOFF, true)
+
+  DST.goodjob:addParam("compare","Comparison GJs?", SCRIPT_PARAM_ONOFF, false)
+  DST.goodjob:addParam("personal", "Personal GJs?", SCRIPT_PARAM_ONOFF, true)
+  DST.goodjob:addParam("simple", "Simple GJs", SCRIPT_PARAM_ONOFF, true)
   DST:addParam("Sorry", "Apologize 4 Deaths?",SCRIPT_PARAM_ONOFF, true)
   if DST.Sorry then
-    DST:addParam("SDelay", "Sorry 4 Death Delay",SCRIPT_PARAM_SLICE, 700, 300, 4000, -2)
+    DST:addParam("SDelay", "Sry 4 Death Delay",SCRIPT_PARAM_SLICE, 700, 300, 4000, -2)
   end
   for i, ally in ipairs(GetAllyHeroes()) do
     local teammate = ally
@@ -197,31 +203,31 @@ function KillPos(i)
 
     local ranN = math.random(1,100)
     local ranName = math.random(1,100)
-    if ranN > 90 then
+    if ranN > 93 and DST.goodjob.compare then
       if ranName > 50 then
         SendChat(ProJection[ math.random( #ProJection ) ]..string.lower(string.sub(allies[i].name, 0,(math.random(5,10))))..ProComp[ math.random( #ProComp ) ]..ProBoost[ math.random( #ProBoost ) ]  )
       else
         SendChat(ProJection[ math.random( #ProJection ) ]..string.lower(string.sub(playchampname[i], 0,(math.random(4,7))))..ProComp[ math.random( #ProComp ) ]..ProBoost[ math.random( #ProBoost ) ]  )
       end
-    elseif ranN > 74 then
+    elseif ranN > 74 and DST.goodjob.personal then
       if ranName > 50 then
         SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(allies[i].name, 0,(math.random(5,10)))))
       else
         SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(playchampname[i], 0,(math.random(4,7)))))
       end
-    elseif ranN > 50 then
+    elseif ranN > 50 and DST.goodjob.simple then
         SendChat(KillBoost[ math.random( #KillBoost ) ])
     end
   else
     local ranN = math.random(1,100)
     local ranName = math.random(1,100)
-    if ranN > 70 then
+    if ranN > 70 and DST.goodjob.compare then
       if ranName > 50 then
         SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(allies[i].name, 0,(math.random(5,10))))..", "..LosingQuotes[ math.random( #LosingQuotes ) ])
       else
         SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(playchampname[i], 0,(math.random(4,7))))..", "..LosingQuotes[ math.random( #LosingQuotes ) ])
       end
-    elseif ranN > 40 then
+    elseif ranN > 40 and DST.goodjob.personal then
        SendChat(KillBoost[ math.random( #KillBoost ) ]..LosingQuotes[ math.random( #LosingQuotes ) ])
     end
   end
@@ -311,16 +317,16 @@ if os.clock() > deathDelay and myHero.dead and DST.Sorry then
 	deathDelay = os.clock() + DST.SDelay -- DELAY METHOD VERY IMPORTANT
 end
 
-  if os.clock() > talkDelay  then
+  if os.clock() > talkDelay and DST.banter then
     gameState = CompareTeams()
     --print(gameState)
     if gameState == true then
-       SendChat( WinningQuotes[ math.random( #TempFix ) ] )
+       SendChat( TempFix[ math.random( #TempFix ) ] )
   	   --SendChat( WinningQuotes[ math.random( #WinningQuotes ) ] )
-    else
-      SendChat( LosingQuotes[ math.random( #LosingQuotes ) ] )
-        --SendChat( LosingQuotes[ math.random( #LosingQuotes ) ] )
-	 end
+    --else
+      --SendChat( LosingQuotes[ math.random( #LosingQuotes ) ] )
+        ---SendChat( LosingQuotes[ math.random( #LosingQuotes ) ] )
+	end
 talkDelay = os.clock() + math.random((DST.Delay - 30) , (DST.Delay + 30)) -- DELAY METHOD VERY IMPORTANT
 end
 
