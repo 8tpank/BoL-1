@@ -1,4 +1,4 @@
-local version = "1.8"
+local version = "1.81"
 --By Tc2r
 --Framework From Rmoises
 local deathDelay = 120
@@ -14,6 +14,7 @@ playchampname = {}
 akills = {}
 awards = {}
 akwards = {}
+
 
 local AutoUpdate = true
 local SELF = SCRIPT_PATH..GetCurrentEnv().FILE_NAME
@@ -130,15 +131,15 @@ function OnLoad()
   game = GetGame()
   deathDelay = os.clock() + deathDelay
   talkDelay = os.clock() + talkDelay
-  DST = scriptConfig("Tc2rs D.S.T. CO-OP","DST")
-  DST:addParam("Friendly Banter?", "banter", SCRIPT_PARAM_ONOFF, true)
+  DST = scriptConfig("Tc2rs D.S.T.","DST")
+  DST:addParam("banter","Friendly Banter?", SCRIPT_PARAM_ONOFF, true)
   DST:addParam("Delay", "Banter Delay",SCRIPT_PARAM_SLICE, 400, 100, 3000, -2)
    DST:addParam("CDelay", "Delay Between GJs",SCRIPT_PARAM_SLICE, 120, 20, 3000, -1)
   DST:addSubMenu("Good Job Options!", "goodjob", SCRIPT_PARAM_ONOFF, true)
 
-  DST.goodjob:addParam("Comparison GJs?", "compare", SCRIPT_PARAM_ONOFF, false)
-  DST.goodjob:addParam("Personal GJs?", "personal", SCRIPT_PARAM_ONOFF, true)
-  DST.goodjob:addParam("Simple GJs", "simple", SCRIPT_PARAM_ONOFF, true)
+  DST.goodjob:addParam("compare","Comparison GJs?", SCRIPT_PARAM_ONOFF, false)
+  DST.goodjob:addParam("personal", "Personal GJs?", SCRIPT_PARAM_ONOFF, true)
+  DST.goodjob:addParam("simple", "Simple GJs", SCRIPT_PARAM_ONOFF, true)
   DST:addParam("Sorry", "Apologize 4 Deaths?",SCRIPT_PARAM_ONOFF, true)
   if DST.Sorry then
     DST:addParam("SDelay", "Sry 4 Death Delay",SCRIPT_PARAM_SLICE, 700, 300, 4000, -2)
