@@ -1,4 +1,4 @@
-local version = "1.81"
+local version = "1.82"
 --By Tc2r
 --Framework From Rmoises
 local deathDelay = 120
@@ -129,9 +129,10 @@ function OnLoad()
   deathDelay = os.clock() + deathDelay
   talkDelay = os.clock() + talkDelay
   DST = scriptConfig("Tc2rs D.S.T. CO-OP","DST")
+  DST:addParam("enableScript", "Enable Script", SCRIPT_PARAM_ONOFF, true)
   DST:addParam("banter","Friendly Banter?", SCRIPT_PARAM_ONOFF, true)
   DST:addParam("Delay", "Banter Delay",SCRIPT_PARAM_SLICE, 400, 100, 3000, -2)
-   DST:addParam("CDelay", "Delay Between GJs",SCRIPT_PARAM_SLICE, 120, 20, 3000, -1)
+  DST:addParam("CDelay", "Delay Between GJs",SCRIPT_PARAM_SLICE, 120, 20, 3000, -1)
   DST:addSubMenu("Good Job Options!", "goodjob", SCRIPT_PARAM_ONOFF, true)
 
   DST.goodjob:addParam("compare","Comparison GJs?", SCRIPT_PARAM_ONOFF, false)
@@ -234,6 +235,8 @@ function KillPos(i)
 end
 
 function OnTick()
+    if not DST.enableScript then return end
+
       if game.isOver and Endgame == 0 then
         TempRNG = #Farewell
         SendChat( Farewell[ math.random(TempRNG) ] )
