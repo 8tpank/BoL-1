@@ -211,7 +211,7 @@ function KillPos(i)
 
 			if MenuTable[ranN] == 1 and DST.goodjob.compare then
 				if ranName > 50 then
-					SendChat(ProJection[ math.random( #ProJection ) ]..string.lower(string.sub(allies[i].name, 1,(math.random(5,10))))..ProComp[ math.random( #ProComp ) ]..ProBoost[ math.random( #ProBoost ) ])
+					SendChat(ProJection[ math.random( #ProJection ) ]..string.lower(string.sub(allies[i].name, 1,math.random(5,10)))..ProComp[ math.random( #ProComp ) ]..ProBoost[ math.random( #ProBoost ) ])
 				else
 					SendChat(ProJection[ math.random( #ProJection ) ]..string.sub(playchampname[i], 1,math.random(4,7))..ProComp[ math.random( #ProComp ) ]..ProBoost[ math.random( #ProBoost ) ])
 				end
@@ -238,17 +238,19 @@ function KillPos(i)
 				SendChat(KillBoost[ math.random( #KillBoost ) ]..LosingQuotes[ math.random( #LosingQuotes ) ])
 			end
 		end
-	end
+		end
 end
 
 function OnTick()
+
 	--[[if os.clock() < (clock or 0) then return end
 	clock = os.clock() + 4
 	randomnumber = math.random(1,4)
-	KillPos(randomnumber)]]--
+	--KillPos(randomnumber)]]--
 	if not DST.enableScript then return end
 	if game.isOver and Endgame == 0 then
 		TempRNG = #Farewell
+
 		SendChat( Farewell[ math.random(TempRNG) ] )
 		Endgame = 1
 		return
