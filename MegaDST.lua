@@ -32,7 +32,7 @@ function UpdateCallback()
 	if file ~= nil then
 		content = file:read("*all")
 		file:close()
-		os.remove(UPDATE_TMP_FILE)
+		--os.remove(UPDATE_TMP_FILE)
 		if content then
 			tmp, sstart = string.find(content, "local version = \"")
 			if sstart then
@@ -129,6 +129,7 @@ function OnLoad()
 	deathDelay = os.clock() + deathDelay
 	talkDelay = os.clock() + talkDelay
 	DST = scriptConfig("Tc2rs DST Ver."..version,"DST")
+	DST:addSubMenu("DST VS HUMANS", "title")
 	DST:addSubMenu("D.S.T. Options!", "goodjob")
 	DST:addParam("enableScript", "Enable Script", SCRIPT_PARAM_ONOFF, true)
 	DST:addParam("banter","Friendly Banter?", SCRIPT_PARAM_ONOFF, true)
@@ -199,7 +200,7 @@ function CompareTeams()
 	end
 
 function KillPos(i)
-	math.randomseed(myHero.x + myHero.y + myHero.z + myHero.health + myHero.mana + os.clock() + os.time() + GetTickCount() + (1000*1000))
+
 	if DST["positiveto"..i] == true and allies[i].type == "AIHeroClient" then
 			local ranN = math.random(1,#MenuTable+1)
 			if ranN == #MenuTable+1 then return end
@@ -248,6 +249,7 @@ function OnTick()
 	randomnumber = math.random(1,4)
 	--KillPos(randomnumber)]]--
 	if not DST.enableScript then return end
+
 	if game.isOver and Endgame == 0 then
 		TempRNG = #Farewell
 
@@ -255,6 +257,7 @@ function OnTick()
 		Endgame = 1
 		return
 	end
+	math.randomseed(myHero.x + myHero.y + myHero.z + myHero.health + myHero.mana + os.clock() + os.time() + GetTickCount() + (1000*1000))
 	allies = GetPlayers(myHero.team, true, false)
 	if DST.goodjob.compare and not compareOff then
 		compareOff = true
@@ -341,7 +344,7 @@ if akwards ~= nil and allies[i].wardKill ~= nilthen
 	end
 end
 end
-]]--
+]]
 CompareTeams()
 for i=1, #akills, 1 do
 	if akills ~= nil and allies[i].kills ~= nil then
@@ -362,7 +365,7 @@ for j, enemy in ipairs(GetEnemyHeroes()) do
 		for i, ally in ipairs(GetAllyHeroes()) do
 			if (ally:GetDistance(enemy) < 1700) and welldone ~= true then
 				if os.clock() > congdelay then
-					PrintChat(ally.."is helping get kill")
+					--PrintChat(ally.."is helping get kill")
 					gameState = CompareTeams()
 					KillPos(i)
 					congdelay = os.clock() + DST.CDelay
@@ -396,4 +399,5 @@ if os.clock() > talkDelay and DST.banter then
 	end
 talkDelay = os.clock() + math.random((DST.Delay*60 - 30) , (DST.Delay*60 + 30)) -- DELAY METHOD VERY IMPORTANT
 end
+
 end
