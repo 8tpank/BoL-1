@@ -1,4 +1,4 @@
-local version = "1.84"
+local version = "1.85"
 --By Tc2r
 --Framework From Rmoises
 local deathDelay = 120
@@ -8,7 +8,9 @@ local pausedelay = 0
 local wardsdelay = 0
 local MenuTable = {0,0,}
 local compareOff, personalOff, simpleOff = false, false, false
+startingtime = 0
 Endgame = 0
+doonce = 0
 game = nil
 welldone = false
 allies = {}
@@ -109,6 +111,7 @@ function GetPlayers(team, includeDead, includeSelf)
 	end
 
 	if includeSelf then table.insert(result, player)
+
 	else
 		for i=1, #result, 1 do
 			if result[i] == player then
@@ -117,61 +120,21 @@ function GetPlayers(team, includeDead, includeSelf)
 			end
 		end
 	end
-	return result
+
+	for i=1, #result, 1 do
+		--print(i.." : "..(result[i].name).." : "..(result[i].charName))
+	end
+		return result
 end
 
 function OnLoad()
 	if AutoUpdate then
 	 Update()
 	end
-	allies = GetPlayers(myHero.team, true, false)
+	startingtime = os.clock()
 	game = GetGame()
 	deathDelay = os.clock() + deathDelay
 	talkDelay = os.clock() + talkDelay
-	DST = scriptConfig("Tc2rs DST Ver."..version,"DST")
-	DST:addSubMenu("DST VS AI", "title")
-	DST:addSubMenu("D.S.T. Options!", "goodjob")
-	DST:addParam("enableScript", "Enable Script", SCRIPT_PARAM_ONOFF, true)
-	DST:addParam("banter","Friendly Banter?", SCRIPT_PARAM_ONOFF, true)
-	DST:addParam("Sorry" , "Apologize 4 Deaths?",SCRIPT_PARAM_ONOFF, true)
-	DST:addParam("Delay" , "Banter Delay (Mins)",SCRIPT_PARAM_SLICE, 5, 1, 20, 0)
-	DST:addParam("CDelay", "GoodJob Delay (Secs)",SCRIPT_PARAM_SLICE, 120, 30, 3000, -1)
-	DST:addParam("SDelay", "Apology Delay (Mins)", SCRIPT_PARAM_SLICE , 4, 1, 20, 0)
-	DST.goodjob:addParam("compare","Comparison GJs?", SCRIPT_PARAM_ONOFF, true)
-	DST.goodjob:addParam("personal", "Personal GJs?", SCRIPT_PARAM_ONOFF, true)
-	DST.goodjob:addParam("simple", "Simple GJs", SCRIPT_PARAM_ONOFF, true)
-
-
-	for i, ally in ipairs(GetAllyHeroes()) do
-		local teammate = ally
-		if teammate.team == myHero.team then DST:addParam("positiveto"..i, "Positive to "..teammate.charName, SCRIPT_PARAM_ONOFF, true) end
-	end
-	for i, ally in ipairs(GetAllyHeroes()) do
-		DST["positiveto"..i] = true
-	end
-	--DST:addParam("WDelay", "Compliment Warding",SCRIPT_PARAM_SLICE, 60, 10, 1000, -1)
-
-
-	for i=1, #allies, 1 do
-		akills[i] = allies[i].kills
-		if allies[i].charName == "DrMundo" then
-			playchampname[i] = "DrMundo"
-		elseif allies[i].charName == "JarvanIV" then
-			playchampname[i] = "Jarvan"
-		elseif allies[i].charName == "MasterYi" then
-			playchampname[i] = "Yi"
-		elseif allies[i].charName == "MissFortune" then
-			playchampname[i] = "Fortune"
-		elseif allies[i].charName == "XinZhao" then
-			playchampname[i] = "Xin"
-		elseif allies[i].charName == "MonkeyKing" then
-			playchampname[i] = "Wukong"
-		else
-			playchampname[i] = allies[i].charName
-		end
-		playchampname[i] = string.lower(playchampname[i])
-		--print(playchampname[i])
-	end
 end
 
 
@@ -200,7 +163,7 @@ function CompareTeams()
 	end
 
 function KillPos(i)
-	math.randomseed(myHero.x + myHero.y + myHero.z + myHero.health + myHero.mana + os.clock() + os.time() + GetTickCount() + (1000*1000))
+
 	if DST["positiveto"..i] == true and allies[i].type == "AIHeroClient" then
 			local ranN = math.random(1,#MenuTable+1)
 			if ranN == #MenuTable+1 then return end
@@ -219,9 +182,9 @@ function KillPos(i)
 			elseif MenuTable[ranN] == 2 and DST.goodjob.personal then
 
 				if ranName > 50 then
-					SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower( string.sub(allies[i].name,1,math.random(4,7))))
+					SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(allies[i].name,1,math.random(4,7))))
 				else
-					SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.sub(playchampname[i], 1,math.random(4,7)))
+					SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(playchampname[i],1,math.random(4,7))))
 				end
 				--print(allies[i].name.." playing "..playchampname[i].." got a kill")
 			elseif MenuTable[ranN] == 3 and DST.goodjob.simple then
@@ -244,11 +207,63 @@ end
 
 function OnTick()
 
+	if os.clock() - startingtime < 7 then return end
+	if doonce ~= 1 then
+		DST = scriptConfig("Tc2rs DST Ver."..version,"DST")
+		DST:addSubMenu("DST 4 COOP vs AI", "title")
+		DST:addSubMenu("D.S.T. Options!", "goodjob")
+		DST:addParam("enableScript", "Enable Script", SCRIPT_PARAM_ONOFF, true)
+		DST:addParam("banter","Friendly Banter?", SCRIPT_PARAM_ONOFF, true)
+		DST:addParam("Sorry" , "Apologize 4 Deaths?",SCRIPT_PARAM_ONOFF, true)
+		DST:addParam("Delay" , "Banter Delay (Mins)",SCRIPT_PARAM_SLICE, 5, 1, 20, 0)
+		DST:addParam("CDelay", "GoodJob Delay (Secs)",SCRIPT_PARAM_SLICE, 120, 30, 3000, -1)
+		DST:addParam("SDelay", "Apology Delay (Mins)", SCRIPT_PARAM_SLICE , 4, 1, 20, 0)
+		DST.goodjob:addParam("compare","Comparison GJs?", SCRIPT_PARAM_ONOFF, true)
+		DST.goodjob:addParam("personal", "Personal GJs?", SCRIPT_PARAM_ONOFF, true)
+		DST.goodjob:addParam("simple", "Simple GJs", SCRIPT_PARAM_ONOFF, true)
+		for i, ally in ipairs(GetAllyHeroes()) do
+		local teammate = ally
+			if teammate.team == myHero.team then DST:addParam("positiveto"..i, "Positive to "..teammate.charName, SCRIPT_PARAM_ONOFF, true) end
+		end
+		for i, ally in ipairs(GetAllyHeroes()) do
+			DST["positiveto"..i] = true
+		end
+		--DST:addParam("WDelay", "Compliment Warding",SCRIPT_PARAM_SLICE, 60, 10, 1000, -1)
+		if allies[2] == nil then
+			allies = GetPlayers(myHero.team, true, false)
+		end
+		for i=1, #allies, 1 do
+			akills[i] = allies[i].kills
+			if allies[i].charName == "DrMundo" then
+				playchampname[i] = "Mundo"
+			elseif allies[i].charName == "JarvanIV" then
+				playchampname[i] = "Jarvan"
+			elseif allies[i].charName == "MasterYi" then
+				playchampname[i] = "Yi"
+			elseif allies[i].charName == "MissFortune" then
+				playchampname[i] = "Mf"
+			elseif allies[i].charName == "XinZhao" then
+				playchampname[i] = "Xin"
+			elseif allies[i].charName == "MonkeyKing" then
+				playchampname[i] = "Wukong"
+			else
+				playchampname[i] = allies[i].charName
+			end
+			playchampname[i] = string.lower(playchampname[i])
+			--print(playchampname[i])
+		end
+		if allies == nil then
+			allies = GetPlayers(myHero.team, true, false)
+		end
+		doonce = 1
+	end
+
 	--[[if os.clock() < (clock or 0) then return end
 	clock = os.clock() + 4
 	randomnumber = math.random(1,4)
 	--KillPos(randomnumber)]]--
 	if not DST.enableScript then return end
+
 	if game.isOver and Endgame == 0 then
 		TempRNG = #Farewell
 
@@ -256,7 +271,7 @@ function OnTick()
 		Endgame = 1
 		return
 	end
-	allies = GetPlayers(myHero.team, true, false)
+		math.randomseed(myHero.x + myHero.y + myHero.z + myHero.health + myHero.mana + os.clock() + os.time() + GetTickCount() + (1000*1000))
 	if DST.goodjob.compare and not compareOff then
 		compareOff = true
 		table.insert(MenuTable, 1)
@@ -342,7 +357,7 @@ if akwards ~= nil and allies[i].wardKill ~= nilthen
 	end
 end
 end
-]]--
+]]
 CompareTeams()
 for i=1, #akills, 1 do
 	if akills ~= nil and allies[i].kills ~= nil then
@@ -351,7 +366,7 @@ for i=1, #akills, 1 do
 				gameState = CompareTeams()
 				DelayAction(function() KillPos(i) end, 3)
 				congdelay = os.clock() + DST.CDelay
-				PrintChat("THIS IS THE ERROR")
+				--PrintChat("THIS IS THE ERROR")
 			end
 			akills[i] = allies[i].kills
 		end
@@ -360,12 +375,13 @@ end
 -- TEMP FIX FOR SCRIPTUNTIL THEY FIX .kill
 for j, enemy in ipairs(GetEnemyHeroes()) do
 	if InFountain(enemy) ~= true and enemy ~= nil and enemy.visible == true and enemy.dead == true and welldone == false then
-		for i, ally in ipairs(GetAllyHeroes()) do
-			if (ally:GetDistance(enemy) < 1700) and welldone ~= true then
+
+		for i=1, #allies, 1 do
+		if allies[i]:GetDistance(enemy) < 1700 and welldone ~= true then
 				if os.clock() > congdelay then
-					--PrintChat(ally.."is helping get kill")
+					--PrintChat(allies[i].name.."is helping get kill")
 					gameState = CompareTeams()
-					KillPos(i)
+					DelayAction(function() KillPos(i) end, 3)
 					congdelay = os.clock() + DST.CDelay
 					welldone = true
 					break
@@ -397,4 +413,5 @@ if os.clock() > talkDelay and DST.banter then
 	end
 talkDelay = os.clock() + math.random((DST.Delay*60 - 30) , (DST.Delay*60 + 30)) -- DELAY METHOD VERY IMPORTANT
 end
+
 end
