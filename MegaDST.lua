@@ -1,4 +1,4 @@
-local version = "1.84"
+local version = "1.85"
 --By Tc2r
 --Framework From Rmoises
 local deathDelay = 120
@@ -8,7 +8,9 @@ local pausedelay = 0
 local wardsdelay = 0
 local MenuTable = {0,0,}
 local compareOff, personalOff, simpleOff = false, false, false
+startingtime = 0
 Endgame = 0
+doonce = 0
 game = nil
 welldone = false
 allies = {}
@@ -48,12 +50,12 @@ function UpdateCallback()
 					file:write(content)
 					file:flush()
 					file:close()
-					PrintChat("<font color=\"#995599\" >MegaDST_Coopmode</font> <font color=\"#00FF00\">Successfully updated to: v"..Version..". Please reload the script with F9.</font>")
+					--PrintChat("<font color=\"#995599\" >MegaDST_Coopmode</font> <font color=\"#00FF00\">Successfully updated to: v"..Version..". Please reload the script with F9.</font>")
 				else
-					PrintChat("<font color=\"#995599\" >MegaDST_Coopmode</font> <font color=\"#FF0000\">Error updating to new version (v"..Version..")</font>")
+					--PrintChat("<font color=\"#995599\" >MegaDST_Coopmode</font> <font color=\"#FF0000\">Error updating to new version (v"..Version..")</font>")
 				end
 			elseif (Version ~= nil) and (Version == tonumber(version)) then
-					PrintChat("<font color=\"#995599\" >MegaDST_Coopmode</font> <font color=\"#00FF00\">No updates found, latest version: v"..Version.." </font>")
+					--PrintChat("<font color=\"#995599\" >MegaDST_Coopmode</font> <font color=\"#00FF00\">No updates found, latest version: v"..Version.." </font>")
 			end
 		end
 	end
@@ -80,7 +82,7 @@ local SpecificBoost = {'carry me ','crry me ','keep it up ','thats the way ','we
 local ProBoost = {'Madlife ','Dade ','Arrow ','xPeke ','Uzi ','Faker ','Insec ','Voyboy ','Saintvicious ','Doublelift ','Aphromoo ','Patoy ','Wickd ','Diamondprox ','Lamia ','Edward ','Maknoon ','Toyz ','Weixiao ','Pray ','Dyrus ','Stanley ','Wildturtle ','theOddOne ','Trick2G ','Cowsep ',' Bjergsen ','Nightblue ','PhantomLord ','Nyjacky ','Lustboy ','Gleeb ','ninjaken ','MegaZero ','Amazing ','Wingsofdeathx ','Chaox ','TheRainman ','InnoX ','Helios ','Pobelter ','Altec ','Krepo ','Snoopeh ','yellowpete ','DkBnet ','Hai ','Sneaky ','LemonNation ','Yazuki ','Otter ','Meyea ','Kez ','KiwiKid ','Heartbeat ','Qtpie','Gosu', 'Kieth'}
 
 --- puzzle pieces to form complex chats
-local ProComp ={'is that ',' you remind me of ','you play like ',' your playstyle is close to ',' you play the same as ',' you play similar to ',' are you',' are you smurfing ',' smurf ',' playmaker ',' mechanics like',' mechanics close to ',' mechanics similar to ',' getting kills like ',' nice kill ',' nice moves ',' comboing the same as ',' positioning close to ',' positioning like ',' positioning reminding me of',' attacking like',' good focusing ',' show me more plays ',' can i be your student ',' teach me ',' that was tight ',' that was cool ',' that was raw ',' that was fire ',' ice cold',' someone call the firemen on our ',' FINISH HIM! Fatality ',' brutality ',' jukes like ',' dodging like ',' you move like ',' carry me',' marry me ',' carry me please',' marry me please',' carry me pls ',' marry me pls ',' have my babies ',' make me babies ',' bare my children ',' good kill ',' awesome kill',' fly kill',' boss kill ',' badass kill',' fire kill',' ice cold kill ',' pimp kill ',' phat kill ',' rad kill ',' sharp kill ',' unreal kill ',' vicious kill ',' wicked kill ',' wick kill ',' wizard ',' sweet action ',' solid ',' gr8 kill ',' epic kill '}
+local ProComp ={'is that ',' you remind me of ','you play like ',' your playstyle is close to ',' you play the same as ',' you play similar to ',' are you',' are you smurfing ',' smurf ',' playmaker ',' mechanics like',' mechanics close to ',' mechanics similar to ',' getting kills like ',' nice kill ',' nice moves ',' comboing the same as ',' positioning close to ',' positioning like ',' positioning reminding me of',' attacking like',' good focusing ',' show me more plays ',' can i be your student ',' teach me ',' that was tight ',' that was cool ',' that was raw ',' that was fire ',' ice cold',' someone call the firemen on our ',' FINISH HIM! Fatality ',' brutality ',' jukes like ',' dodging like ',' you move like ',' carry me ',' marry me ',' carry me please',' marry me please',' carry me pls ',' marry me pls ',' have my babies ',' make me babies ',' bare my children ',' good kill ',' awesome kill',' fly kill',' boss kill ',' badass kill',' fire kill',' ice cold kill ',' pimp kill ',' phat kill ',' rad kill ',' sharp kill ',' unreal kill ',' vicious kill ',' wicked kill ',' wick kill ',' wizard ',' sweet action ',' solid ',' gr8 kill ',' epic kill '}
 
 --- puzzle pieces to form complex chats
 local ProJection ={'Holy cow ','Jesus ','Daang ','Dang ','Damn ','Omg ','Dear lord ','Wowsers ','Mother of God ','Whoa ','Holy shit ','Hly shit ','What the ??? ','Cool ','so so ','Wicked ','Wicked cool ','Tight ','Killer ','zomfg ','zomg ','hells to the yes ','good looking out ','good call ','holy smokes ','man ','OMLG ','fuck me ','Dats whats up '}
@@ -109,6 +111,7 @@ function GetPlayers(team, includeDead, includeSelf)
 	end
 
 	if includeSelf then table.insert(result, player)
+
 	else
 		for i=1, #result, 1 do
 			if result[i] == player then
@@ -117,61 +120,21 @@ function GetPlayers(team, includeDead, includeSelf)
 			end
 		end
 	end
-	return result
+
+	for i=1, #result, 1 do
+		--print(i.." : "..(result[i].name).." : "..(result[i].charName))
+	end
+		return result
 end
 
 function OnLoad()
 	if AutoUpdate then
 	 Update()
 	end
-	allies = GetPlayers(myHero.team, true, false)
+	startingtime = os.clock()
 	game = GetGame()
 	deathDelay = os.clock() + deathDelay
 	talkDelay = os.clock() + talkDelay
-	DST = scriptConfig("Tc2rs DST Ver."..version,"DST")
-	DST:addSubMenu("DST VS HUMANS", "title")
-	DST:addSubMenu("D.S.T. Options!", "goodjob")
-	DST:addParam("enableScript", "Enable Script", SCRIPT_PARAM_ONOFF, true)
-	DST:addParam("banter","Friendly Banter?", SCRIPT_PARAM_ONOFF, true)
-	DST:addParam("Sorry" , "Apologize 4 Deaths?",SCRIPT_PARAM_ONOFF, true)
-	DST:addParam("Delay" , "Banter Delay (Mins)",SCRIPT_PARAM_SLICE, 5, 1, 20, 0)
-	DST:addParam("CDelay", "GoodJob Delay (Secs)",SCRIPT_PARAM_SLICE, 120, 30, 3000, -1)
-	DST:addParam("SDelay", "Apology Delay (Mins)", SCRIPT_PARAM_SLICE , 4, 1, 20, 0)
-	DST.goodjob:addParam("compare","Comparison GJs?", SCRIPT_PARAM_ONOFF, true)
-	DST.goodjob:addParam("personal", "Personal GJs?", SCRIPT_PARAM_ONOFF, true)
-	DST.goodjob:addParam("simple", "Simple GJs", SCRIPT_PARAM_ONOFF, true)
-
-
-	for i, ally in ipairs(GetAllyHeroes()) do
-		local teammate = ally
-		if teammate.team == myHero.team then DST:addParam("positiveto"..i, "Positive to "..teammate.charName, SCRIPT_PARAM_ONOFF, true) end
-	end
-	for i, ally in ipairs(GetAllyHeroes()) do
-		DST["positiveto"..i] = true
-	end
-	--DST:addParam("WDelay", "Compliment Warding",SCRIPT_PARAM_SLICE, 60, 10, 1000, -1)
-
-
-	for i=1, #allies, 1 do
-		akills[i] = allies[i].kills
-		if allies[i].charName == "DrMundo" then
-			playchampname[i] = "DrMundo"
-		elseif allies[i].charName == "JarvanIV" then
-			playchampname[i] = "Jarvan"
-		elseif allies[i].charName == "MasterYi" then
-			playchampname[i] = "Yi"
-		elseif allies[i].charName == "MissFortune" then
-			playchampname[i] = "Fortune"
-		elseif allies[i].charName == "XinZhao" then
-			playchampname[i] = "Xin"
-		elseif allies[i].charName == "MonkeyKing" then
-			playchampname[i] = "Wukong"
-		else
-			playchampname[i] = allies[i].charName
-		end
-		playchampname[i] = string.lower(playchampname[i])
-		--print(playchampname[i])
-	end
 end
 
 
@@ -219,9 +182,9 @@ function KillPos(i)
 			elseif MenuTable[ranN] == 2 and DST.goodjob.personal then
 
 				if ranName > 50 then
-					SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower( string.sub(allies[i].name,1,math.random(4,7))))
+					SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(allies[i].name,1,math.random(4,7))))
 				else
-					SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.sub(playchampname[i], 1,math.random(4,7)))
+					SendChat(SpecificBoost[ math.random( #SpecificBoost ) ]..string.lower(string.sub(playchampname[i],1,math.random(4,7))))
 				end
 				--print(allies[i].name.." playing "..playchampname[i].." got a kill")
 			elseif MenuTable[ranN] == 3 and DST.goodjob.simple then
@@ -244,6 +207,57 @@ end
 
 function OnTick()
 
+	if os.clock() - startingtime < 7 then return end
+	if doonce ~= 1 then
+		DST = scriptConfig("Tc2rs DST Ver."..version,"DST")
+		DST:addSubMenu("DST VS HUMANS", "title")
+		DST:addSubMenu("D.S.T. Options!", "goodjob")
+		DST:addParam("enableScript", "Enable Script", SCRIPT_PARAM_ONOFF, true)
+		DST:addParam("banter","Friendly Banter?", SCRIPT_PARAM_ONOFF, true)
+		DST:addParam("Sorry" , "Apologize 4 Deaths?",SCRIPT_PARAM_ONOFF, true)
+		DST:addParam("Delay" , "Banter Delay (Mins)",SCRIPT_PARAM_SLICE, 5, 1, 20, 0)
+		DST:addParam("CDelay", "GoodJob Delay (Secs)",SCRIPT_PARAM_SLICE, 120, 30, 3000, -1)
+		DST:addParam("SDelay", "Apology Delay (Mins)", SCRIPT_PARAM_SLICE , 4, 1, 20, 0)
+		DST.goodjob:addParam("compare","Comparison GJs?", SCRIPT_PARAM_ONOFF, true)
+		DST.goodjob:addParam("personal", "Personal GJs?", SCRIPT_PARAM_ONOFF, true)
+		DST.goodjob:addParam("simple", "Simple GJs", SCRIPT_PARAM_ONOFF, true)
+		for i, ally in ipairs(GetAllyHeroes()) do
+		local teammate = ally
+			if teammate.team == myHero.team then DST:addParam("positiveto"..i, "Positive to "..teammate.charName, SCRIPT_PARAM_ONOFF, true) end
+		end
+		for i, ally in ipairs(GetAllyHeroes()) do
+			DST["positiveto"..i] = true
+		end
+		--DST:addParam("WDelay", "Compliment Warding",SCRIPT_PARAM_SLICE, 60, 10, 1000, -1)
+		if allies[2] == nil then
+			allies = GetPlayers(myHero.team, true, false)
+		end
+		for i=1, #allies, 1 do
+			akills[i] = allies[i].kills
+			if allies[i].charName == "DrMundo" then
+				playchampname[i] = "Mundo"
+			elseif allies[i].charName == "JarvanIV" then
+				playchampname[i] = "Jarvan"
+			elseif allies[i].charName == "MasterYi" then
+				playchampname[i] = "Yi"
+			elseif allies[i].charName == "MissFortune" then
+				playchampname[i] = "Mf"
+			elseif allies[i].charName == "XinZhao" then
+				playchampname[i] = "Xin"
+			elseif allies[i].charName == "MonkeyKing" then
+				playchampname[i] = "Wukong"
+			else
+				playchampname[i] = allies[i].charName
+			end
+			playchampname[i] = string.lower(playchampname[i])
+			--print(playchampname[i])
+		end
+		if allies == nil then
+			allies = GetPlayers(myHero.team, true, false)
+		end
+		doonce = 1
+	end
+
 	--[[if os.clock() < (clock or 0) then return end
 	clock = os.clock() + 4
 	randomnumber = math.random(1,4)
@@ -257,8 +271,7 @@ function OnTick()
 		Endgame = 1
 		return
 	end
-	math.randomseed(myHero.x + myHero.y + myHero.z + myHero.health + myHero.mana + os.clock() + os.time() + GetTickCount() + (1000*1000))
-	allies = GetPlayers(myHero.team, true, false)
+		math.randomseed(myHero.x + myHero.y + myHero.z + myHero.health + myHero.mana + os.clock() + os.time() + GetTickCount() + (1000*1000))
 	if DST.goodjob.compare and not compareOff then
 		compareOff = true
 		table.insert(MenuTable, 1)
@@ -353,7 +366,7 @@ for i=1, #akills, 1 do
 				gameState = CompareTeams()
 				DelayAction(function() KillPos(i) end, 3)
 				congdelay = os.clock() + DST.CDelay
-				PrintChat("THIS IS THE ERROR")
+				--PrintChat("THIS IS THE ERROR")
 			end
 			akills[i] = allies[i].kills
 		end
@@ -362,12 +375,13 @@ end
 -- TEMP FIX FOR SCRIPTUNTIL THEY FIX .kill
 for j, enemy in ipairs(GetEnemyHeroes()) do
 	if InFountain(enemy) ~= true and enemy ~= nil and enemy.visible == true and enemy.dead == true and welldone == false then
-		for i, ally in ipairs(GetAllyHeroes()) do
-			if (ally:GetDistance(enemy) < 1700) and welldone ~= true then
+
+		for i=1, #allies, 1 do
+		if allies[i]:GetDistance(enemy) < 1700 and welldone ~= true then
 				if os.clock() > congdelay then
-					--PrintChat(ally.."is helping get kill")
+					--PrintChat(allies[i].name.."is helping get kill")
 					gameState = CompareTeams()
-					KillPos(i)
+					DelayAction(function() KillPos(i) end, 3)
 					congdelay = os.clock() + DST.CDelay
 					welldone = true
 					break
